@@ -53,22 +53,29 @@ sysdevinterface.service('pathQueryService', [ '$http', 'modifyMap', function ($h
           $http.get(url).success(function(response) {
             geojson = that.extractGeoJson(response);
             that.routeResponse(model, geojson);
+            console.log(JSON.stringify(geojson, null, 4));
           });
           break;
         case 'Google Path (via Server [OBJ])':
           $http.post(baseUrl+"/obj/", requestObject)
           .then(response => {
                 geojson = that.extractGeoJson(response.data);
+                //console.dir(response);
                 that.routeResponse(model, geojson);
-              })
+              });
           break;
         case 'Dijkstra Shortest Path':
-          alert("Feauture not implemented yet.")
+          url = baseUrl+"/dijkstra?"+"originLat="+markers[0].lat+"&originLon="+markers[0].lng+"&destinationLat="+markers[1].lat+"&destinationLon="+markers[1].lng;
+          $http.get(url).success(function(response) {
+            console.log(JSON.stringify(response, null, 4));
+            that.routeResponse(model, response)
+          });
+
           // $http.post(baseUrl, requestObject)
           //   .then(response => {
           //       that.routeResponse(model, response)
           //     })
-              break;
+          break;
       }
   }
 
